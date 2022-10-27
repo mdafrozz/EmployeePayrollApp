@@ -1,7 +1,6 @@
 package com.bridgelabz.employeepayrollapp.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,15 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgelabz.employeepayrollapp.dto.EmployeePayrollDTO;
 import com.bridgelabz.employeepayrollapp.model.EmployeePayrollData;
-import com.bridgelabz.employeepayrollapp.service.EmployeePayrollService;
+import com.bridgelabz.employeepayrollapp.service.IEmployeePayrollService;
 
 @RestController
 @RequestMapping("/employeepayrollservice")
 public class EmployeePayrollController {
 
 	@Autowired
-	EmployeePayrollService service;
+	IEmployeePayrollService service;
 	
 	@RequestMapping(value = {"", "/", "/get"})
     public String getMessage() {
@@ -29,7 +29,7 @@ public class EmployeePayrollController {
     }
 	
 	@PostMapping("/create")
-    public EmployeePayrollData getdata(@RequestBody EmployeePayrollData model) {
+    public EmployeePayrollData getdata(@RequestBody EmployeePayrollDTO model) {
         EmployeePayrollData model1 = service.create(model);
         return model1;
     }
@@ -41,15 +41,15 @@ public class EmployeePayrollController {
     }
     
 	@GetMapping("/get/{id}")
-	 public Optional<EmployeePayrollData> findById(@PathVariable int id) {
-        Optional<EmployeePayrollData> response = service.findById(id);
+	 public EmployeePayrollData findById(@PathVariable int id) {
+        EmployeePayrollData response = service.findById(id);
         return response;
     }
     
     @PutMapping("/update/{id}") 
-    public EmployeePayrollData edit(@RequestBody EmployeePayrollData model, @PathVariable int id) {
-        EmployeePayrollData response;
-        response = service.update(id, model);
+    public EmployeePayrollData edit(@RequestBody EmployeePayrollData model, 
+    		@PathVariable int id) {
+        EmployeePayrollData response = service.update(id, model);
         return response;
     }
     
