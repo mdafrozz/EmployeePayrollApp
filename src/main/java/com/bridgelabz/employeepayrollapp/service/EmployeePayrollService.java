@@ -1,12 +1,12 @@
 package com.bridgelabz.employeepayrollapp.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.employeepayrollapp.dto.EmployeePayrollDTO;
+import com.bridgelabz.employeepayrollapp.exception.EmployeePayrollException;
 import com.bridgelabz.employeepayrollapp.model.EmployeePayrollData;
 import com.bridgelabz.employeepayrollapp.repository.EmployeePayrollRepository;
 
@@ -15,28 +15,32 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 	
 	@Autowired
     EmployeePayrollRepository repo;
+	
 
-    public String getmessage() {
-        return "Hello..!! Welcome to Employee Payroll App..!";
+	public String getmessage() {
+        return "Welcome toEmployee Payroll App..!!";
     }
 
-    public EmployeePayrollData create(EmployeePayrollDTO data) {
-    	EmployeePayrollData model = new EmployeePayrollData(data);
-    	repo.save(model);
-        return model;
-    }
-    
     public EmployeePayrollData findById(int id) {
-    	Optional<EmployeePayrollData> model  = repo.findById(id);
-        return model.get();
+        return repo.findById(id).stream()
+                .filter(data -> data.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new EmployeePayrollException("Employee Not Found/ Incorrect ID"));
+    }
+
+    public EmployeePayrollData create(EmployeePayrollDTO model) {
+    	EmployeePayrollData data = new EmployeePayrollData(model);
+    	repo.save(data);
+        return data;
     }
     
+      
     public List<EmployeePayrollData> showAll() {
         return repo.findAll();
     }
     
-    public EmployeePayrollData update(int id, EmployeePayrollData model) {
-    	  EmployeePayrollData employee = repo.getReferenceById(id);
+    public EmployeePayrollData update(int id, EmployeePayrollDTO model) {
+    	  EmployeePayrollData employee = this.findById(id);
               employee.setName(model.getName());
               employee.setProfileImage(model.getProfileImage());
               employee.setProfileImage(model.getProfileImage());
@@ -50,12 +54,11 @@ public class EmployeePayrollService implements IEmployeePayrollService {
     
     
     public String delete(int id) {
-        Optional<EmployeePayrollData> employee = repo.findById(id);
-        if (employee.isPresent()) {
-            repo.delete(employee.get());
-            return "Deleted record with id number: " + id;
-        } else {
-            return "Record not Found";
-        }
+        EmployeePayrollData data = this.findById(id);
+        if(data.equals(data)) {
+        	repo.deleteById(id);
+        	return "Employee ID : "+id;}
+        else
+        	return "Incorrect ID";
     }
 }

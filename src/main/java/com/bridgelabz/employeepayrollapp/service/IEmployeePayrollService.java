@@ -11,6 +11,6 @@ public interface IEmployeePayrollService {
     public EmployeePayrollData create(EmployeePayrollDTO model);
     public EmployeePayrollData findById(int id);
     public List<EmployeePayrollData> showAll();
-    public EmployeePayrollData update(int id, EmployeePayrollData model);
+    public EmployeePayrollData update(int id, EmployeePayrollDTO model);
     public String delete(int id);
 }
