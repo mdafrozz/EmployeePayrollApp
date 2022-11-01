@@ -23,7 +23,7 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
     public EmployeePayrollData findById(int id) {
         return repo.findById(id).stream()
-                .filter(data -> data.getId() == id)
+                .filter(data -> data.getEmployeeId() == id)
                 .findFirst()
                 .orElseThrow(() -> new EmployeePayrollException("Employee Not Found/ Incorrect ID"));
     }
@@ -42,11 +42,11 @@ public class EmployeePayrollService implements IEmployeePayrollService {
     public EmployeePayrollData update(int id, EmployeePayrollDTO model) {
     	  EmployeePayrollData employee = this.findById(id);
               employee.setName(model.getName());
-              employee.setProfileImage(model.getProfileImage());
-              employee.setProfileImage(model.getProfileImage());
+              employee.setProfilePic(model.getProfilePic());
               employee.setGender(model.getGender());
               employee.setDepartment(model.getDepartment());
               employee.setSalary(model.getSalary());
+              employee.setStartDate(model.getStartDate());
               employee.setNotes(model.getNotes());
               repo.save(employee);
               return employee;                
@@ -60,5 +60,9 @@ public class EmployeePayrollService implements IEmployeePayrollService {
         	return "Employee ID : "+id;}
         else
         	return "Incorrect ID";
+    }
+    
+    public List<EmployeePayrollData> getByDepartment(String department) {
+        return repo.findByDepartment(department);
     }
 }

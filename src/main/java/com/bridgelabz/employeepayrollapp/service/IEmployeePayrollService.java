@@ -13,4 +13,5 @@ public interface IEmployeePayrollService {
     public List<EmployeePayrollData> showAll();
     public EmployeePayrollData update(int id, EmployeePayrollDTO model);
     public String delete(int id);
+	public List<EmployeePayrollData> getByDepartment(String department);
 }

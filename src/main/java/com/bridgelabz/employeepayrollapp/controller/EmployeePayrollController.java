@@ -2,6 +2,8 @@ package com.bridgelabz.employeepayrollapp.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +37,8 @@ public class EmployeePayrollController {
     }
 	
 	@PostMapping("/create")
-    public ResponseEntity<ResponseDTO> getdata(@RequestBody EmployeePayrollDTO model) {
-	    EmployeePayrollData data = null;
-	    data = service.create(model);
+    public ResponseEntity<ResponseDTO> getdata(@Valid @RequestBody EmployeePayrollDTO model) {
+	    EmployeePayrollData data = service.create(model);
         ResponseDTO responseDTO = new ResponseDTO("Employee added Successfully..!! ", data);
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
@@ -70,6 +71,13 @@ public class EmployeePayrollController {
         String msg = service.delete(id);
         ResponseDTO responseDTO = new ResponseDTO("Employee Removed Successfully..!!", msg );
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+    }
+    
+    @GetMapping("/dept/{department}")
+    public ResponseEntity<ResponseDTO> getEmpDept(@PathVariable String department) {
+        List<EmployeePayrollData> empDataList = service.getByDepartment(department);
+        ResponseDTO responseDTO = new ResponseDTO("Success call for Departments!!!", empDataList);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
 }
