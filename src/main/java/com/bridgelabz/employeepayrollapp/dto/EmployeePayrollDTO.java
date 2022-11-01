@@ -1,46 +1,51 @@
 package com.bridgelabz.employeepayrollapp.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class EmployeePayrollDTO {
 	
-	private int id;
+	//private int id;
 	
 	@Pattern(regexp = "^[A-Z]{1}[a-zA-Z\\s]{2,}$", message = "Employee name is Invalid")
-    @NotEmpty(message = "Employee name cannot be null")
-	public String name;
+    public String name;
 	
-	public String profileImage;
+	@NotBlank(message = "profilePic cannot be empty" )
+	public String profilePic;
 	
-	@Pattern(regexp = "Male|Female", message = "Gender should be Male or Female")
+	@Pattern(regexp = "male|female", message = "Gender should be male or female")
 	public String gender;
 	
 	@NotNull(message = "Department cannot be Null")
-	public String department;
+	public List<String> department;
     
 	@Min(value = 500, message = "Min salary should be more than 500")
     public long salary;
-    
+
 	@JsonFormat(pattern = "dd MM yyyy")
-    @NotNull(message = "startDate cannot be Empty")
-    @PastOrPresent(message = "startDate should be past or present date")
-    public LocalDate startDate = LocalDate.now();
+	@NotNull(message = "startDate should Not be Empty")
+	@PastOrPresent (message = "startDate should be past or today's date")
+    public LocalDate startDate;
     
-	@NotEmpty(message = "Notes cannot be Empty")
+	@NotBlank(message = "Notes cannot be Empty")
     public String notes;
 	
 	
